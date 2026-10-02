@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRAWIRA | Dashboard</title>
+    <link rel="stylesheet" href="./Style/styledashboard.css">
+
+    <!-- Proteksi dashboard: wajib login -->
+    <script>
+        (function () {
+            const isLoggedIn = sessionStorage.getItem("adminLoggedIn");
+
+            if (isLoggedIn !== "true") {
+                window.location.replace("./gerbang.html");
+            }
+        })();
+    </script>
+</head>
+
+<body>
+    <div class="app">
+
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-logo">
+                    <img src="./logo/PRAWIRA.png" alt="PRAWIRA">
+                </div>
+                <div>
+                    <h2>PRAWIRA</h2>
+                    <span>DATA MANAGEMENT</span>
+                </div>
+            </div>
+
+            <div class="menu-title">MENU UTAMA</div>
+
+            <nav class="menu">
+                <button class="menu-item active" data-section="dashboard">
+                    <span class="menu-icon">⌂</span>
+                    <span>Dashboard</span>
+                </button>
+
+                <button class="menu-item" data-section="prawira">
+                    <span class="menu-icon">♙</span>
+                    <span>DATA PRAWIRA</span>
+                </button>
+
+                <button class="menu-item" data-section="mdt">
+                    <span class="menu-icon">▣</span>
+                    <span>LIST MDT</span>
+                </button>
+
+                <button class="menu-item" data-section="evidence">
+                    <span class="menu-icon">◈</span>
+                    <span>DATA EVIDENCE</span>
+                </button>
+
+                <button class="menu-item" data-section="apd">
+                    <span class="menu-icon">🛡</span>
+                    <span>APD MANAGEMENT</span>
+                </button>
+
+                <button class="menu-item" data-section="kodeetik">
+                    <span class="menu-icon">⚖</span>
+                    <span>KASUS KODE ETIK</span>
+                </button>
+
+                <button class="menu-item" data-section="caseingoing">
+                    <span class="menu-icon">📂</span>
+                    <span>CASE IN GOING</span>
+                </button>
+
+                <button class="menu-item" data-section="rekap">
+                    <span class="menu-icon">▤</span>
+                    <span>REKAP SEMUA</span>
+                </button>
+
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="admin-mini">
+                    <img src="./logo/PRAWIRA.png" alt="Logo" class="avatar">
+                    <div>
+                        <strong>prawiragp</strong>
+                        <small>Administrator</small>
+                    </div>
+                </div>
+
+                <button id="logoutButton" class="logout">
+                    <span>↪</span> Logout
+                </button>
+            </div>
+        </aside>
+
+        <main class="main">
+            <header class="topbar">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <!-- Tombol Toggle Sidebar -->
+                    <button id="toggleSidebar"
+                        style="background: transparent; border: none; font-size: 24px; cursor: pointer; color: var(--blue-dark);">☰</button>
+
+                    <div>
+                        <div class="breadcrumb">PRAWIRA / <span id="pageLabel">DASHBOARD</span></div>
+                        <h1 id="pageTitle">Dashboard</h1>
+                        <p id="pageDescription">Pusat Pengelolaan Data Evidence Kepolisian Garuda Prime RP.</p>
+                    </div>
+                </div>
+
+                <div class="top-actions">
+                    <div class="online">
+                        <span></span> SYSTEM ONLINE
+                    </div>
+                    <div class="profile">
+                        <img src="./logo/PRAWIRA.png" alt="Logo" class="avatar">
+                        <div>
+                            <strong>prawiragp</strong>
+                            <small>Administrator</small>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content">
+
+                <!-- DASHBOARD -->
+                <section id="dashboard" class="page-section active-section">
+                    <div class="hero">
+                        <div>
+                            <span class="eyebrow">ADMIN CONTROL PANEL</span>
+                            <h2>Selamat Datang, Prawiragp</h2>
+                            <p>Kelola DATA PRAWIRA, MDT, Evidence, dan rekap data dalam satu dashboard.</p>
+                        </div>
+                        <div class="hero-mark">P</div>
+                    </div>
+
+                    <div class="stats">
+                        <div class="stat-card">
+                            <div class="stat-icon blue">♙</div>
+                            <div><span>DATA PRAWIRA</span><strong id="dash-prawira">0</strong><small>Data
+                                    terdaftar</small></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon purple">▣</div>
+                            <div><span>LIST MDT</span><strong id="dash-mdt">0</strong><small>Data MDT</small></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon cyan">◈</div>
+                            <div><span>DATA EVIDENCE</span><strong id="dash-evidence">0</strong><small>Evidence
+                                    tersimpan</small></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon red">🛡</div>
+                            <div><span>APD MANAGEMENT</span><strong id="dash-apd">0</strong><small>Transaksi APD</small>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon yellow">⚖</div>
+                            <div><span>KODE ETIK</span><strong id="dash-kodeetik">0</strong><small>Kasus
+                                    tercatat</small></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon purple">📂</div>
+                            <div><span>CASE IN GOING</span><strong id="dash-caseingoing">0</strong><small>Kasus
+                                    berjalan</small></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon green">▤</div>
+                            <div><span>REKAP SEMUA</span><strong id="dash-total">0</strong><small>Total seluruh
+                                    data</small></div>
+                        </div>
+                    </div>
+
+                    <div class="panel-grid">
+                        <div class="panel">
+                            <div class="panel-head">
+                                <div><span class="eyebrow">QUICK ACCESS</span>
+                                    <h3>Akses Data</h3>
+                                </div>
+                            </div>
+                            <div class="quick-grid">
+                                <button class="quick" data-section="prawira"><b>DATA PRAWIRA</b><span>Kelola data
+                                        Prawira →</span></button>
+                                <button class="quick" data-section="mdt"><b>LIST MDT</b><span>Lihat daftar MDT
+                                        →</span></button>
+                                <button class="quick" data-section="evidence"><b>DATA EVIDENCE</b><span>Kelola evidence
+                                        →</span></button>
+                                <button class="quick" data-section="apd"><b>APD MANAGEMENT</b><span>Kelola APD Anggota
+                                        →</span></button>
+                                <button class="quick" data-section="kodeetik"><b>KASUS KODE ETIK</b><span>Kasus Kode
+                                        Etik→</span></button>
+                                <button class="quick" data-section="caseingoing"><b>CASE IN GOING</b><span>Kasus
+                                        Internal →</span></button>
+                                <button class="quick" data-section="rekap"><b>REKAP SEMUA</b><span>Lihat ringkasan
+                                        →</span></button>
+                            </div>
+                        </div>
+
+                        <div class="panel">
+                            <div class="panel-head">
+                                <div><span class="eyebrow">SYSTEM</span>
+                                    <h3>Status Sistem</h3>
+                                </div>
+                                <span class="badge success">ONLINE</span>
+                            </div>
+                            <div class="system-list">
+                                <div><span>Database</span><b>Connected</b></div>
+                                <div><span>Authentication</span><b>Active</b></div>
+                                <div><span>Dashboard</span><b>Protected</b></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- DATA PRAWIRA -->
+                <section id="prawira" class="page-section">
+                    <div class="section-heading">
+                        <div><span class="eyebrow">PRAWIRA MANAGEMENT</span>
+                            <h2>DATA PRAWIRA</h2>
+                            <p>Kelola dan pantau data Prawira.</p>
+                        </div>
+                        <button class="primary-btn" id="btnTambahPrawira" onclick="bukaModalPrawira()">+ Tambah
+                            Data</button>
+                    </div>
+
+                    <div class="table-panel">
+                        <div class="table-toolbar">
+                            <input type="search" id="cariPrawira" placeholder="Cari Nama / Call Sign...">
+                            <span class="badge" id="totalPrawira">TOTAL 0 DATA</span>
+                        </div>
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>CALL SIGN</th>
+                                        <th>PANGKAT</th>
+                                        <th>NAMA</th>
+                                        <th>JENIS KELAMIN</th>
+                                        <th>TANGGUNG JAWAB</th>
+                                        <th>AKSI</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabelPrawiraBody">
+                                    <!-- Data dari JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- LIST MDT -->
+                <section id="mdt" class="page-section">
+                    <div class="section-heading">
+                        <div>
+                            <span class="eyebrow">MDT MANAGEMENT</span>
+                            <h2>LIST MDT</h2>
+                            <p>Daftar dan pengelolaan MDT.</p>
+                        </div>
+                        <button class="primary-btn" id="btnTambahMDT">+ Tambah MDT</button>
+                    </div>
+                    <div class="table-panel">
+                        <div class="table-toolbar">
+                            <input type="search" id="cariMDT" placeholder="Cari MDT No / Komando / Officer...">
+                            <span class="badge" id="totalMDT">TOTAL 0 DATA</span>
+                        </div>
+                        <div class="table-wrap">
+                            <table style="min-width: 1000px;">
+                                <thead>
+                                    <tr>
+                                        <th>TANGGAL & WAKTU</th>
+                                        <th>MDT NO</th>
+                                        <th>KOMANDO</th>
+                                        <th>OFFICER</th>
+                                        <th>STATUS MDT</th>
+                                        <th>STATUS SETOR</th>
+                                        <th>KETERANGAN</th>
+                                        <th>AKSI</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabelMDTBody">
+                                    <!-- Data MDT dari JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- EVIDENCE -->
+                <section id="evidence" class="page-section">
+                    <div class="section-heading">
+                        <div><span class="eyebrow">EVIDENCE MANAGEMENT</span>
+                            <h2>DATA EVIDENCE</h2>
+                            <p>Kelola data evidence yang tersimpan.</p>
+                        </div>
+                        <button class="primary-btn" id="btnTambahEvidence">+ Tambah Evidence</button>
+                    </div>
+                    <div class="table-panel">
+                        <div class="table-toolbar">
+                            <input type="search" id="cariEvidence" placeholder="Cari No Incident / Officer...">
+                            <span class="badge" id="totalEvidence">TOTAL 0 DATA</span>
+                        </div>
+                        <div class="table-wrap">
+                            <table style="min-width: 1200px;">
+                                <thead>
+                                    <tr>
+                                        <th>DATA (TANGGAL)</th>
+                                        <th>NO INCIDENT</th>
+                                        <th>BARANG EVIDENCE</th>
+                                        <th>TOTAL</th>
+                                        <th>LOKER CODE</th>
+                                        <th>OFFICER</th>
+                                        <th>KETERANGAN</th>
+                                        <th>AKSI</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabelEvidenceBody">
+                                    <!-- Data Evidence dari JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- APD MANAGEMENT -->
+                <section id="apd" class="page-section">
+                    <div class="section-heading">
+                        <div>
+                            <span class="eyebrow">EQUIPMENT CONTROL</span>
+                            <h2>APD MANAGEMENT</h2>
+                            <p>Pencatatan Withdraw Senjata & Deposit APD.</p>
+                        </div>
+                        <button class="primary-btn" id="btnTambahAPD">+ Transaksi Baru</button>
+                    </div>
+                    <div class="table-panel">
+                        <div class="table-toolbar">
+                            <input type="search" id="cariAPD" placeholder="Cari Personel / Jenis Transaksi / Barang...">
+                            <span class="badge" id="totalAPD">TOTAL 0 DATA</span>
+                        </div>
+                        <div class="table-wrap">
+                            <table class="table-apd">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 130px;">TANGGAL & WAKTU</th>
+                                        <th style="width: 140px;">OFFICER</th>
+                                        <th style="width: 150px;">NAMA PERSONEL</th>
+                                        <th style="width: 90px;">CALL SIGN</th>
+                                        <th style="width: 130px;">JENIS TRANSAKSI</th>
+                                        <th style="width: 220px;">NAMA BARANG / SENJATA</th>
+                                        <th style="width: 70px; text-align: center;">JUMLAH</th>
+                                        <th>KETERANGAN</th>
+                                        <th style="width: 110px; text-align: center;">AKSI</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabelAPDBody">
+                                    <!-- Data APD dari JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- DATA KASUS KODE ETIK -->
+                <section id="kodeetik" class="page-section">
+                    <div class="section-heading">
+                        <div>
+                            <span class="eyebrow">ETHICS & DISCIPLINE</span>
+                            <h2>DATA KASUS KODE ETIK</h2>
+                            <p>Pengelolaan Dokumen Etik, Surat Keputusan, DNA Test, dan APD Anggota Resign.</p>
+                        </div>
+                        <button class="primary-btn" id="btnTambahKodeEtik">+ Tambah Dokumen / Berkas</button>
+                    </div>
+                    <div class="table-panel">
+                        <div class="table-toolbar">
+                            <input type="search" id="cariKodeEtik"
+                                placeholder="Cari Jenis Dokumen / Nama Anggota / Keterangan...">
+                            <span class="badge" id="totalKodeEtik">TOTAL 0 DATA</span>
+                        </div>
+                        <div class="table-wrap">
+                            <table class="table-apd">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 130px;">TANGGAL & WAKTU</th>
+                                        <th style="width: 170px;">JENIS DOKUMEN</th>
+                                        <th style="width: 160px;">PERSONEL / ANGGOTA</th>
+                                        <th style="width: 150px;">OFFICER / PENANGGUNG JAWAB</th>
+                                        <th>KETERANGAN / DOKUMENTASI / LINK BUKTI</th>
+                                        <th style="width: 110px; text-align: center;">AKSI</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabelKodeEtikBody">
+                                    <!-- Data Kode Etik dari JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CASE IN GOING -->
+                <section id="caseingoing" class="page-section">
+                    <div class="section-heading">
+                        <div>
+                            <span class="eyebrow">CASE MANAGEMENT</span>
+                            <h2>CASE IN GOING</h2>
+                            <p>Pengelolaan data kasus yang sedang berlangsung / berjalan.</p>
+                        </div>
+                        <button class="primary-btn" id="btnTambahCase">+ Tambah Kasus</button>
+                    </div>
+                    <div class="table-panel">
+                        <div class="table-toolbar">
+                            <input type="search" id="cariCase"
+                                placeholder="Cari No / Nama Kasus / Officer / Keterangan...">
+                            <span class="badge" id="totalCase">TOTAL 0 DATA</span>
+                        </div>
+                        <div class="table-wrap">
+                            <table class="table-apd">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 130px;">DATE</th>
+                                        <th style="width: 100px;">NO</th>
+                                        <th style="width: 180px;">NAMA</th>
+                                        <th style="width: 160px;">OFFICER</th>
+                                        <th>KETERANGAN</th>
+                                        <th style="width: 120px; text-align: center;">DOKUMENTASI</th>
+                                        <th style="width: 140px; text-align: center;">AKSI</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabelCaseBody">
+                                    <!-- Data dari JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- REKAP -->
+                <section id="rekap" class="page-section">
+                    <div class="stats recap-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon blue">♙</div>
+                            <div><span>DATA PRAWIRA</span><strong id="rekap-prawira">0</strong></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon purple">▣</div>
+                            <div><span>LIST MDT</span><strong id="rekap-mdt">0</strong></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon cyan">◈</div>
+                            <div><span>EVIDENCE</span><strong id="rekap-evidence">0</strong></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon red">🛡</div>
+                            <div><span>APD MANAGEMENT</span><strong id="rekap-apd">0</strong></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon white">⚖</div>
+                            <div><span>DATA KASUS SIDANG ETIK</span><strong id="rekap-kodeetik">0</strong></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon purple">📂</div>
+                            <div><span>CASE IN GOING</span><strong id="rekap-caseingoing">0</strong></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon green">Σ</div>
+                            <div><span>TOTAL</span><strong id="rekap-total">0</strong></div>
+                        </div>
+                    </div>
+
+                    <!-- TABEL AKUMULASI REKAP BARANG EVIDENCE -->
+                    <div class="table-panel" style="margin-top: 20px;">
+                        <div class="panel-head">
+                            <div>
+                                <span class="eyebrow">REKAPITULASI BARANG</span>
+                                <h3>Total Akumulasi Barang Evidence</h3>
+                            </div>
+                            <input type="search" id="cariRekapBarang" placeholder="Cari Barang..."
+                                style="padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); font-size: 11px; width: 220px;">
+                        </div>
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="width: 60px;">NO</th>
+                                        <th>NAMA BARANG EVIDENCE</th>
+                                        <th style="text-align: right;">TOTAL JUMLAH (QTY)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabelRekapBarangBody">
+                                    <!-- Data akumulasi barang dirender via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Form CRUD Prawira -->
+    <div id="modalPrawira" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Tambah Data Prawira</h3>
+                <span class="close-modal" id="closeModal">&times;</span>
+            </div>
+            <form id="formPrawira">
+                <input type="hidden" id="editIndex" value="">
+
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label>CALL SIGN</label>
+                        <input type="text" id="callSign" required placeholder="Contoh: 123">
+                    </div>
+                    <div class="form-group">
+                        <label>PANGKAT</label>
+                        <select id="pangkat" required>
+                            <option value="" disabled selected>Pilih Pangkat...</option>
+                            <option value="Bripda">Bripda</option>
+                            <option value="Briptu">Briptu</option>
+                            <option value="Brigpol">Brigpol</option>
+                            <option value="Bripka">Bripka</option>
+                            <option value="Aipda">Aipda</option>
+                            <option value="Aiptu">Aiptu</option>
+                            <option value="Ipda">Ipda</option>
+                            <option value="Iptu">Iptu</option>
+                            <option value="AKP">AKP</option>
+                            <option value="Kompol">Kompol</option>
+                            <option value="AKBP">AKBP</option>
+                            <option value="Kombes Pol">Kombes Pol</option>
+                            <option value="Brigjen Pol">Brigjen Pol</option>
+                            <option value="Irjen Pol">Irjen Pol</option>
+                            <option value="Komjen Pol">Komjen Pol</option>
+                            <option value="Jendral Pol">Jendral Pol</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>JENIS KELAMIN</label>
+                        <select id="jk" required>
+                            <option value="" disabled selected>Pilih Jenis Kelamin...</option>
+                            <option value="Laki-laki">Laki-laki</option>
+                            <option value="Perempuan">Perempuan</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>TANGGUNG JAWAB</label>
+                        <select id="tanggungJawab" required>
+                            <option value="" disabled selected>Pilih Tanggung Jawab...</option>
+                            <option value="kepalasatuan">Kepala Satuan</option>
+                            <option value="wakilkepalasatuan">Wakil Kepala Satuan</option>
+                            <option value="sekretaris divisi">Sekretaris Divisi</option>
+                            <option value="anggota">Anggota</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>NAMA LENGKAP</label>
+                    <input type="text" id="nama" required placeholder="Masukkan Nama Lengkap">
+                </div>
+
+                <button type="submit" class="primary-btn" style="width: 100%; margin-top: 15px;">Simpan Data
+                    Prawira</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Form CRUD MDT -->
+    <div id="modalMDT" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitleMDT">Tambah List MDT</h3>
+                <span class="close-modal" id="closeModalMDT">&times;</span>
+            </div>
+            <form id="formMDT">
+                <input type="hidden" id="editIndexMDT" value="">
+
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label>TANGGAL & WAKTU</label>
+                        <input type="datetime-local" id="mdtTanggal" required>
+                    </div>
+                    <div class="form-group">
+                        <label>MDT NO</label>
+                        <input type="text" id="mdtNo" placeholder="Contoh: MDT-01" required>
+                    </div>
+                    <div class="form-group">
+                        <label>KOMANDO</label>
+                        <input type="text" id="mdtKomando" placeholder="Masukkan Komando" required>
+                    </div>
+                    <div class="form-group">
+                        <label>OFFICER</label>
+                        <select id="mdtOfficer" required>
+                            <option value="" disabled selected>Pilih Officer...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>STATUS MDT</label>
+                        <select id="mdtStatus" required>
+                            <option value="" disabled selected>Pilih Status...</option>
+                            <option value="Lengkap">Lengkap</option>
+                            <option value="Tidak Lengkap">Tidak Lengkap</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>STATUS SETOR</label>
+                        <select id="mdtSetor" required>
+                            <option value="" disabled selected>Pilih Status...</option>
+                            <option value="Disetorkan">Disetorkan</option>
+                            <option value="Tidak Disetorkan">Tidak Disetorkan</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>KETERANGAN</label>
+                    <input type="text" id="mdtKeterangan" placeholder="Keterangan opsional">
+                </div>
+
+                <div class="form-group">
+                    <label>FOTO DOKUMENTASI MDT</label>
+                    <input type="text" id="mdtFotoUrl" placeholder="Link Foto (https://...)">
+                    <input type="file" id="mdtFotoFile" accept="image/*" style="margin-top: 6px;">
+                    <div id="mdtFotoPreviewContainer" style="margin-top: 6px; display: none;">
+                        <img id="mdtFotoPreview" src="" alt="Preview Foto MDT"
+                            style="max-width: 100%; max-height: 120px; border-radius: 6px; border: 1px solid var(--border); object-fit: contain;">
+                    </div>
+                </div>
+
+                <button type="submit" class="primary-btn" style="width: 100%; margin-top: 15px;">Simpan MDT</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Detail Review MDT -->
+    <div id="modalReviewMDT" class="modal" style="display: none;">
+        <div class="modal-content" style="max-height: 90vh; overflow-y: auto; max-width: 600px;">
+            <div class="modal-header">
+                <h3>Review Detail & Dokumentasi MDT</h3>
+                <span class="close-modal" id="closeModalReviewMDT"
+                    style="cursor: pointer; font-size: 24px;">&times;</span>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 14px; font-size: 13px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <small style="color: var(--muted); font-size: 10px; font-weight: 700;">TANGGAL & WAKTU</small>
+                        <div id="revMdtTanggal" style="font-weight: 600; margin-top: 2px;">-</div>
+                    </div>
+                    <div>
+                        <small style="color: var(--muted); font-size: 10px; font-weight: 700;">MDT NO</small>
+                        <div id="revMdtNo" style="font-weight: 600; margin-top: 2px;">-</div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <small style="color: var(--muted); font-size: 10px; font-weight: 700;">KOMANDO</small>
+                        <div id="revMdtKomando" style="margin-top: 2px;">-</div>
+                    </div>
+                    <div>
+                        <small style="color: var(--muted); font-size: 10px; font-weight: 700;">OFFICER</small>
+                        <div id="revMdtOfficer" style="font-weight: 600; margin-top: 2px;">-</div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <small style="color: var(--muted); font-size: 10px; font-weight: 700;">STATUS MDT</small>
+                        <div id="revMdtStatus" style="margin-top: 2px;">-</div>
+                    </div>
+                    <div>
+                        <small style="color: var(--muted); font-size: 10px; font-weight: 700;">STATUS SETOR</small>
+                        <div id="revMdtSetor" style="margin-top: 2px;">-</div>
+                    </div>
+                </div>
+
+                <div>
+                    <small style="color: var(--muted); font-size: 10px; font-weight: 700;">FOTO DOKUMENTASI MDT</small>
+                    <div id="revMdtFotoContainer"
+                        style="margin-top: 6px; text-align: center; background: #f8fafc; padding: 10px; border-radius: 10px; border: 1px dashed var(--border);">
+                        <img id="revMdtFoto" src="" alt="Foto MDT"
+                            style="max-width: 100%; max-height: 280px; border-radius: 8px; display: none;">
+                        <span id="revMdtNoFoto" style="color: var(--muted); font-size: 12px;">Tidak Ada Foto
+                            Dokumentasi</span>
+                    </div>
+                </div>
+
+                <div>
+                    <small style="color: var(--muted); font-size: 10px; font-weight: 700;">KETERANGAN</small>
+                    <div id="revMdtKeterangan"
+                        style="background: var(--panel2); padding: 10px; border-radius: 8px; border: 1px solid var(--border); margin-top: 4px;">
+                        -</div>
+                </div>
+            </div>
+
+            <button type="button" class="primary-btn" id="btnTutupReviewMDT"
+                style="width: 100%; margin-top: 20px; background: var(--muted);">Tutup</button>
+        </div>
+    </div>
+
+    <!-- Modal Form CRUD Evidence Dynamic -->
+    <div id="modalEvidence" class="modal" style="display: none;">
+        <div class="modal-content" style="max-height: 90vh; overflow-y: auto; max-width: 650px;">
+            <div class="modal-header">
+                <h3 id="modalTitleEvidence">Tambah Data Evidence</h3>
+                <span class="close-modal" id="closeModalEvidence"
+                    style="cursor: pointer; font-size: 24px;">&times;</span>
+            </div>
+            <form id="formEvidence">
+                <input type="hidden" id="editIndexEvidence" value="">
+
+                <div class="form-group"><label>DATA (Tanggal dan Waktu)</label><input type="datetime-local" id="evData"
+                        required></div>
+                <div class="form-group"><label>LOKER EVIDENCE PASSWORD CODE</label><input type="text" id="evCode"
+                        required></div>
+                <div class="form-group"><label>EVIDENCE NOMOR INCIDENT</label><input type="text" id="evIncident"
+                        required></div>
+                <div class="form-group"><label>MDT TIDAK DI INCIDENCE</label><input type="text" id="evMdtTidak"></div>
+
+                <!-- CONTAINER BARANG DINAMIS -->
+                <div class="form-group">
+                    <label>DAFTAR BARANG EVIDENCE</label>
+                    <div id="containerBarangEvidence" style="display: flex; flex-direction: column; gap: 10px;">
+                        <!-- Baris barang akan ditambahkan via JavaScript -->
+                    </div>
+
+                    <button type="button" id="btnTambahBarangRow" class="btn-add-row"
+                        style="margin-top: 12px; width: 100%;">
+                        + Tambah Jenis Barang
+                    </button>
+                </div>
+
+                <!-- INPUT FOTO EVIDENCE -->
+                <div class="form-group">
+                    <label>FOTO DOKUMENTASI EVIDENCE (URL / UPLOAD)</label>
+                    <input type="text" id="evFotoUrl"
+                        placeholder="Masukkan Link Foto (https://...) atau Upload dibawah">
+                    <input type="file" id="evFotoFile" accept="image/*" style="margin-top: 8px;">
+                    <div id="evFotoPreviewContainer" style="margin-top: 8px; display: none;">
+                        <img id="evFotoPreview" src="" alt="Preview Foto"
+                            style="max-width: 100%; max-height: 180px; border-radius: 8px; border: 1px solid var(--border); object-fit: contain;">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>PETUGAS / OFFICER</label>
+                    <select id="evidenceOfficer" required>
+                        <option value="" disabled selected>Pilih Officer dari Data Prawira...</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>KETERANGAN</label><input type="text" id="evKeterangan"></div>
+
+                <button type="submit" class="primary-btn" style="width: 100%; margin-top: 15px;">Simpan
+                    Evidence</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Detail Review Evidence -->
+    <div id="modalReviewEvidence" class="modal" style="display: none;">
+        <div class="modal-content" style="max-height: 90vh; overflow-y: auto; max-width: 600px;">
+            <div class="modal-header">
+                <h3>Review Detail Evidence</h3>
+                <span class="close-modal" id="closeModalReviewEvidence"
+                    style="cursor: pointer; font-size: 24px;">&times;</span>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 14px; font-size: 13px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <small style="color: var(--muted); font-size: 10px; font-weight: 700;">TANGGAL & WAKTU</small>
+                        <div id="revEvTanggal" style="font-weight: 600; margin-top: 2px;">-</div>
+                    </div>
+                    <div>
+                        <small style="color: var(--muted); font-size: 10px; font-weight: 700;">NO INCIDENT</small>
+                        <div id="revEvIncident" style="font-weight: 600; margin-top: 2px;">-</div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <small style="color: var(--muted); font-size: 10px; font-weight: 700;">LOKER CODE</small>
+                        <div id="revEvCode" style="margin-top: 2px;"><code>-</code></div>
+                    </div>
+                    <div>
+                        <small style="color: var(--muted); font-size: 10px; font-weight: 700;">OFFICER</small>
+                        <div id="revEvOfficer" style="font-weight: 600; margin-top: 2px;">-</div>
+                    </div>
+                </div>
+
+                <div>
+                    <small style="color: var(--muted); font-size: 10px; font-weight: 700;">BARANG EVIDENCE</small>
+                    <div id="revEvBarang" style="margin-top: 4px;">-</div>
+                </div>
+
+                <div>
+                    <small style="color: var(--muted); font-size: 10px; font-weight: 700;">FOTO DOKUMENTASI
+                        EVIDENCE</small>
+                    <div id="revEvFotoContainer"
+                        style="margin-top: 6px; text-align: center; background: #f8fafc; padding: 10px; border-radius: 10px; border: 1px dashed var(--border);">
+                        <img id="revEvFoto" src="" alt="Foto Evidence"
+                            style="max-width: 100%; max-height: 280px; border-radius: 8px; display: none;">
+                        <span id="revEvNoFoto" style="color: var(--muted); font-size: 12px;">Tidak Ada Foto
+                            Dokumentasi</span>
+                    </div>
+                </div>
+
+                <div>
+                    <small style="color: var(--muted); font-size: 10px; font-weight: 700;">KETERANGAN</small>
+                    <div id="revEvKeterangan"
+                        style="background: var(--panel2); padding: 10px; border-radius: 8px; border: 1px solid var(--border); margin-top: 4px;">
+                        -</div>
+                </div>
+            </div>
+
+            <button type="button" class="primary-btn" id="btnTutupReviewEv"
+                style="width: 100%; margin-top: 20px; background: var(--muted);">Tutup</button>
+        </div>
+    </div>
+
+    <!-- Modal Form CRUD APD -->
+    <div id="modalAPD" class="modal" style="display: none;">
+        <div class="modal-content" style="max-height: 90vh; overflow-y: auto; max-width: 650px;">
+            <div class="modal-header">
+                <h3 id="modalTitleAPD">Tambah Transaksi APD</h3>
+                <span class="close-modal" id="closeModalAPD" style="cursor: pointer; font-size: 24px;">&times;</span>
+            </div>
+            <form id="formAPD">
+                <input type="hidden" id="editIndexAPD" value="">
+
+                <div class="form-group">
+                    <label>Tanggal & Waktu</label>
+                    <input type="datetime-local" id="apdTanggal" required>
+                </div>
+
+                <!-- DROPDOWN OFFICER DARI DATA PRAWIRA -->
+                <div class="form-group">
+                    <label>PETUGAS / OFFICER</label>
+                    <select id="apdOfficer" required>
+                        <option value="" disabled selected>Pilih Officer dari Data Prawira...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Nama Personel</label>
+                    <input type="text" id="apdNama" placeholder="Nama Personel" required>
+                </div>
+                <div class="form-group">
+                    <label>Call Sign</label>
+                    <input type="text" id="apdCallSign" placeholder="Contoh: 101" required>
+                </div>
+                <div class="form-group">
+                    <label>Jenis Transaksi</label>
+                    <select id="apdJenis" required>
+                        <option value="" disabled selected>Pilih Jenis Transaksi...</option>
+                        <option value="Withdraw Senjata">Withdraw Senjata</option>
+                        <option value="Deposit APD">Deposit APD</option>
+                    </select>
+                </div>
+
+                <!-- CONTAINER BARANG DINAMIS APD -->
+                <div class="form-group">
+                    <label>DAFTAR BARANG / SENJATA</label>
+                    <div id="containerBarangAPD" style="display: flex; flex-direction: column; gap: 10px;">
+                        <!-- Baris barang akan ditambahkan via JavaScript -->
+                    </div>
+
+                    <button type="button" id="btnTambahBarangAPD" class="btn-add-row"
+                        style="margin-top: 12px; width: 100%;">
+                        + Tambah Jenis Barang
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <label>Keterangan</label>
+                    <input type="text" id="apdKeterangan" placeholder="Keterangan opsional">
+                </div>
+
+                <button type="submit" class="primary-btn" style="width: 100%; margin-top: 15px;">Simpan
+                    Transaksi</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Form CRUD Kode Etik -->
+    <div id="modalKodeEtik" class="modal" style="display: none;">
+        <div class="modal-content" style="max-height: 90vh; overflow-y: auto; max-width: 600px;">
+            <div class="modal-header">
+                <h3 id="modalTitleKodeEtik">Tambah Dokumen Kode Etik</h3>
+                <span class="close-modal" id="closeModalKodeEtik"
+                    style="cursor: pointer; font-size: 24px;">&times;</span>
+            </div>
+            <form id="formKodeEtik">
+                <input type="hidden" id="editIndexKodeEtik" value="">
+
+                <div class="form-group">
+                    <label>Tanggal & Waktu</label>
+                    <input type="datetime-local" id="keTanggal" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Kategori Dokumen / Surat</label>
+                    <select id="keJenisDokumen" required>
+                        <option value="" disabled selected>Pilih Jenis Dokumen...</option>
+
+                        <!-- Opsi Tambahan Baru -->
+                        <option value="SURAT PUTUSAN SIDANG KODE ETIK">SURAT PUTUSAN SIDANG KODE ETIK</option>
+                        <option value="PROKER HARIAN">PROKER HARIAN</option>
+                        <option value="PROKER MINGGUAN">PROKER MINGGUAN</option>
+                        <option value="PROKER BULANAN">PROKER BULANAN</option>
+                        <option value="LAPORAN HARIAN">LAPORAN HARIAN</option>
+                        <option value="SURAT PEMANGGILAN">SURAT PEMANGGILAN</option>
+                        <option value="SOP RESIGN">SOP RESIGN</option>
+                        <option value="SURAT HASIL PEMERIKSAAN NARKOTIKA ANGGOTA">SURAT HASIL PEMERIKSAAN NARKOTIKA
+                            ANGGOTA</option>
+
+                        <!-- Opsi Dokumen Lama -->
+                        <option value="SURAT PENGELUARAN BARANG EVIDENCE">SURAT PENGELUARAN BARANG EVIDENCE</option>
+                        <option value="SURAT DNA TEST">SURAT DNA TEST</option>
+                        <option value="SURAT KEPUTUSAN SIDANG KODE ETIK">SURAT KEPUTUSAN SIDANG KODE ETIK</option>
+                        <option value="LOCKER APD ANGGOTA RESIGN">LOCKER APD ANGGOTA RESIGN</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Personel / Anggota Terkait</label>
+                    <input type="text" id="kePersonel" placeholder="Masukkan nama personel / anggota..." required>
+                </div>
+
+                <div class="form-group">
+                    <label>Officer / Penanggung Jawab / Penyidik</label>
+                    <select id="keOfficer" required>
+                        <option value="" disabled selected>Pilih Officer dari Data Prawira...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Detail / Kronologi / Link Dokumen Bukti / Barang APD</label>
+                    <textarea id="keKeterangan" rows="3"
+                        placeholder="Masukkan rincian kronologi, hasil sidang, atau keterangan tambahan..."
+                        style="width:100%; padding: 10px; border-radius: 8px; border: 1.5px solid #e2e8f0; font-family: inherit;"
+                        required></textarea>
+                </div>
+
+                <!-- FIELD INPUT FOTO BUKTI / DOKUMEN -->
+                <div class="form-group">
+                    <label>FOTO BUKTI / DOKUMEN (URL / UPLOAD)</label>
+                    <input type="text" id="keFotoUrl"
+                        placeholder="Masukkan Link Foto (https://...) atau Upload dibawah">
+                    <input type="file" id="keFotoFile" accept="image/*" style="margin-top: 8px;">
+                    <div id="keFotoPreviewContainer" style="margin-top: 8px; display: none;">
+                        <img id="keFotoPreview" src="" alt="Preview Foto Kode Etik"
+                            style="max-width: 100%; max-height: 180px; border-radius: 8px; border: 1px solid var(--border); object-fit: contain;">
+                    </div>
+                </div>
+
+                <button type="submit" class="primary-btn" style="width: 100%; margin-top: 15px;">Simpan Dokumen</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Detail Review Kode Etik -->
+    <div id="modalReviewKodeEtik" class="modal" style="display: none;">
+        <div class="modal-content" style="max-height: 90vh; overflow-y: auto; max-width: 600px;">
+            <div class="modal-header">
+                <h3>Detail Review Dokumen</h3>
+                <span class="close-modal" id="closeModalReviewKodeEtik"
+                    style="cursor: pointer; font-size: 24px;">&times;</span>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 14px; font-size: 13px;">
+                <div>
+                    <small style="color: var(--muted); font-size: 10px; font-weight: 700;">TANGGAL & WAKTU</small>
+                    <div id="revTanggal" style="font-weight: 600; margin-top: 2px;">-</div>
+                </div>
+
+                <div>
+                    <small style="color: var(--muted); font-size: 10px; font-weight: 700;">JENIS DOKUMEN</small>
+                    <div id="revJenis" style="margin-top: 4px;">-</div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <small style="color: var(--muted); font-size: 10px; font-weight: 700;">PERSONEL / ANGGOTA
+                            TERKAIT</small>
+                        <div id="revPersonel" style="font-weight: 600; margin-top: 2px;">-</div>
+                    </div>
+                    <div>
+                        <small style="color: var(--muted); font-size: 10px; font-weight: 700;">OFFICER / PENANGGUNG
+                            JAWAB</small>
+                        <div id="revOfficer" style="font-weight: 600; margin-top: 2px;">-</div>
+                    </div>
+                </div>
+
+                <div>
+                    <small style="color: var(--muted); font-size: 10px; font-weight: 700;">DETAIL / KETERANGAN /
+                        BUKTI</small>
+                    <div id="revKeterangan"
+                        style="background: var(--panel2); padding: 12px; border-radius: 8px; border: 1px solid var(--border); margin-top: 4px; white-space: pre-wrap; font-family: inherit;">
+                        -</div>
+                </div>
+
+                <!-- FOTO BUKTI / DOKUMEN -->
+                <div>
+                    <small style="color: var(--muted); font-size: 10px; font-weight: 700;">FOTO DOKUMENTASI /
+                        BUKTI</small>
+                    <div id="revKeFotoContainer"
+                        style="margin-top: 6px; text-align: center; background: #f8fafc; padding: 10px; border-radius: 10px; border: 1px dashed var(--border);">
+                        <img id="revKeFoto" src="" alt="Foto Bukti"
+                            style="max-width: 100%; max-height: 280px; border-radius: 8px; display: none;">
+                        <span id="revKeNoFoto" style="color: var(--muted); font-size: 12px;">Tidak Ada Foto
+                            Dokumentasi</span>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="primary-btn" id="btnTutupReview"
+                style="width: 100%; margin-top: 20px; background: var(--muted);">Tutup</button>
+        </div>
+    </div>
+
+    <!-- Tambahkan Modal Form CRUD Case In Going sebelum </body> -->
+    <div id="modalCase" class="modal" style="display: none;">
+        <div class="modal-content" style="max-height: 90vh; overflow-y: auto; max-width: 600px;">
+            <div class="modal-header">
+                <h3 id="modalTitleCase">Tambah Case In Going</h3>
+                <span class="close-modal" id="closeModalCase" style="cursor: pointer; font-size: 24px;">&times;</span>
+            </div>
+            <form id="formCase">
+                <input type="hidden" id="editIndexCase" value="">
+
+                <div class="form-group">
+                    <label>DATE (Tanggal & Waktu)</label>
+                    <input type="datetime-local" id="caseDate" required>
+                </div>
+
+                <div class="form-group">
+                    <label>NO KASUS</label>
+                    <input type="text" id="caseNo" placeholder="Contoh: CASE-001 / INC-102" required>
+                </div>
+
+                <div class="form-group">
+                    <label>NAMA KASUS / TERLAPOR</label>
+                    <input type="text" id="caseNama" placeholder="Masukkan nama kasus / subjek" required>
+                </div>
+
+                <div class="form-group">
+                    <label>OFFICER / PENANGGUNG JAWAB</label>
+                    <select id="caseOfficer" required>
+                        <option value="" disabled selected>Pilih Officer dari Data Prawira...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>KETERANGAN</label>
+                    <textarea id="caseKeterangan" rows="3" placeholder="Rincian / kronologi singkat..."
+                        style="width:100%; padding: 10px; border-radius: 8px; border: 1.5px solid #e2e8f0; font-family: inherit;"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>FOTO DOKUMENTASI (URL / UPLOAD)</label>
+                    <input type="text" id="caseFotoUrl"
+                        placeholder="Masukkan Link Foto (https://...) atau Upload dibawah">
+                    <input type="file" id="caseFotoFile" accept="image/*" style="margin-top: 8px;">
+                    <div id="caseFotoPreviewContainer" style="margin-top: 8px; display: none;">
+                        <img id="caseFotoPreview" src="" alt="Preview Dokumentasi"
+                            style="max-width: 100%; max-height: 180px; border-radius: 8px; border: 1px solid var(--border); object-fit: contain;">
+                    </div>
+                </div>
+
+                <button type="submit" class="primary-btn" style="width: 100%; margin-top: 15px;">Simpan Case</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Review Dokumentasi Case -->
+    <div id="modalReviewCase" class="modal" style="display: none;">
+        <div class="modal-content" style="max-height: 90vh; overflow-y: auto; max-width: 600px;">
+            <div class="modal-header">
+                <h3>Detail Dokumentasi Case</h3>
+                <span class="close-modal" id="closeModalReviewCase"
+                    style="cursor: pointer; font-size: 24px;">&times;</span>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 14px; font-size: 13px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <small style="color: var(--muted); font-size: 10px; font-weight: 700;">DATE</small>
+                        <div id="revCaseDate" style="font-weight: 600; margin-top: 2px;">-</div>
+                    </div>
+                    <div>
+                        <small style="color: var(--muted); font-size: 10px; font-weight: 700;">NO KASUS</small>
+                        <div id="revCaseNo" style="font-weight: 600; margin-top: 2px;">-</div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <small style="color: var(--muted); font-size: 10px; font-weight: 700;">NAMA</small>
+                        <div id="revCaseNama" style="font-weight: 600; margin-top: 2px;">-</div>
+                    </div>
+                    <div>
+                        <small style="color: var(--muted); font-size: 10px; font-weight: 700;">OFFICER</small>
+                        <div id="revCaseOfficer" style="font-weight: 600; margin-top: 2px;">-</div>
+                    </div>
+                </div>
+
+                <div>
+                    <small style="color: var(--muted); font-size: 10px; font-weight: 700;">KETERANGAN</small>
+                    <div id="revCaseKeterangan"
+                        style="background: var(--panel2); padding: 12px; border-radius: 8px; border: 1px solid var(--border); margin-top: 4px; white-space: pre-wrap;">
+                        -</div>
+                </div>
+
+                <div>
+                    <small style="color: var(--muted); font-size: 10px; font-weight: 700;">FOTO DOKUMENTASI</small>
+                    <div id="revCaseFotoContainer"
+                        style="margin-top: 6px; text-align: center; background: #f8fafc; padding: 10px; border-radius: 10px; border: 1px dashed var(--border);">
+                        <img id="revCaseFoto" src="" alt="Dokumentasi Case"
+                            style="max-width: 100%; max-height: 280px; border-radius: 8px; display: none;">
+                        <span id="revCaseNoFoto" style="color: var(--muted); font-size: 12px;">Tidak Ada Foto
+                            Dokumentasi</span>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="primary-btn" id="btnTutupReviewCase"
+                style="width: 100%; margin-top: 20px; background: var(--muted);">Tutup</button>
+        </div>
+    </div>
+
+
+    <script src="./Javascript/scriptindex.js"></script>
+</body>
+
+</html>
