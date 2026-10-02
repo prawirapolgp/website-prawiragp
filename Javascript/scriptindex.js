@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (isLoggedIn !== "true") {
             alert("AKSES DITOLAK!\nSilakan login terlebih dahulu.");
             sessionStorage.clear();
-            window.location.replace("gerbang.html");
+            window.location.replace("index.html");
         }
 
         // Tampilkan nama & role di sidebar/topbar
@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /* =====================================
-       HALAMAN LOGIN (gerbang.html)
+       HALAMAN LOGIN (index.html)
     ===================================== */
     const loginForm = document.getElementById("loginForm");
 
@@ -186,7 +186,7 @@ document.addEventListener("DOMContentLoaded", function () {
             sessionStorage.removeItem("adminLoggedIn");
             sessionStorage.removeItem("userRole");
             sessionStorage.removeItem("userName");
-            window.location.replace("gerbang.html");
+            window.location.replace("index.html");
         });
     }
 
