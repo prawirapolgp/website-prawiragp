@@ -24,27 +24,26 @@
             <h1>DATA EVIDENCE</h1>
             <p class="subtitle">Kepolisian Garuda Prime RP</p>
 
-            <form id="loginForm" onsubmit="event.preventDefault(); window.prosesLogin();">
+            <form id="loginForm" onsubmit="event.preventDefault(); prosesLogin();">
     
-                <div class="input-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" placeholder="Masukkan username" required>
-                </div>
+    <div class="input-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Masukkan username" required>
+    </div>
 
-                <div class="input-group">
-                    <label for="password">Password</label>
-                    <div class="password-box">
-                        <input type="password" id="password" placeholder="Masukkan password" required>
-                        <!-- Panggil fungsi togglePasswordVisibility() langsung di sini -->
-                        <button type="button" id="togglePassword" onclick="togglePasswordVisibility()">👁️</button>
-                    </div>
-                </div>
+    <div class="input-group">
+        <label for="password">Password</label>
+        <div class="password-box">
+            <input type="password" id="password" placeholder="Masukkan password" required>
+            <button type="button" id="togglePassword" onclick="togglePasswordVisibility()">👁️️</button>
+        </div>
+    </div>
 
-                <div id="errorMessage" class="error-message"></div>
+    <div id="errorMessage" class="error-message"></div>
 
-                <button type="submit" id="btnLogin" class="login-button">LOGIN</button>
+    <button type="submit" id="btnLogin" class="login-button">LOGIN</button>
 
-            </form>
+</form>
 
             <div class="login-footer">
                 Prawira | Xyanz © 2026
