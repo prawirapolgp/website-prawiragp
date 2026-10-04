@@ -1,19 +1,5 @@
 /* =====================================
-    KONFIGURASI FIREBASE REALTIME DATABASE
-===================================== */
-const firebaseConfig = {
-    // Sesuaikan URL database Firebase Anda jika berbeda
-    databaseURL: "https://websiteprawiragp-default-rtdb.firebaseio.com"
-};
-
-// Inisialisasi Firebase
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
-const db = firebase.database();
-
-/* =====================================
-    DATA LOGIN ADMIN & USER
+    1. KONFIGURASI LOGIN DEFAULT
 ===================================== */
 const ADMIN_USERNAME = "prawiragp";
 const ADMIN_PASSWORD = "polgpontop";
@@ -21,6 +7,116 @@ const ADMIN_PASSWORD = "polgpontop";
 const USER_USERNAME = "userprawira";
 const USER_PASSWORD = "user123";
 
+/* =====================================
+    2. INISIALISASI FIREBASE (AMANI CRASH)
+===================================== */
+let db = null;
+try {
+    const firebaseConfig = {
+        databaseURL: "https://websiteprawiragp-default-rtdb.firebaseio.com"
+    };
+
+    if (typeof firebase !== "undefined") {
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        db = firebase.database();
+    }
+} catch (e) {
+    console.warn("Firebase belum dimuat atau tidak terhubung:", e);
+}
+
+/* =====================================
+    3. FUNGSI UTAMA LOGIN (DIPANGGIL FORM)
+===================================== */
+window.prosesLogin = function () {
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+    const errorMessage = document.getElementById("errorMessage");
+
+    if (!usernameInput || !passwordInput) return;
+
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value;
+
+    if (errorMessage) errorMessage.style.display = "none";
+
+    // A. Cek Admin
+    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+        sessionStorage.setItem("adminLoggedIn", "true");
+        sessionStorage.setItem("userRole", "administrator");
+        sessionStorage.setItem("userName", "Administrator");
+        window.location.replace("dashboard.html");
+        return;
+    }
+
+    // B. Cek User Anggota
+    if (username === USER_USERNAME && password === USER_PASSWORD) {
+        sessionStorage.setItem("adminLoggedIn", "true");
+        sessionStorage.setItem("userRole", "anggota");
+        sessionStorage.setItem("userName", "Anggota Prawira");
+        window.location.replace("dashboard.html");
+        return;
+    }
+
+    // C. Cek dari LocalStorage jika ada
+    let dataAnggota = JSON.parse(localStorage.getItem('dataPrawira')) || [];
+    const cekAkun = dataAnggota.find(user => user.username === username && user.password === password);
+
+    if (cekAkun) {
+        sessionStorage.setItem("adminLoggedIn", "true");
+        sessionStorage.setItem("userRole", cekAkun.role || "anggota");
+        sessionStorage.setItem("userName", cekAkun.nama);
+        window.location.replace("dashboard.html");
+        return;
+    }
+
+    // Gagal Login
+    if (errorMessage) {
+        errorMessage.textContent = "Username atau password salah!";
+        errorMessage.style.display = "block";
+    }
+    passwordInput.value = "";
+};
+
+/* =====================================
+    4. FUNGSI MATA (TOGGLE PASSWORD)
+===================================== */
+window.togglePasswordVisibility = function () {
+    const passwordInput = document.getElementById("password");
+    const toggleBtn = document.getElementById("togglePassword");
+
+    if (!passwordInput) return;
+
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        if (toggleBtn) toggleBtn.textContent = "🙈";
+    } else {
+        passwordInput.type = "password";
+        if (toggleBtn) toggleBtn.textContent = "👁️";
+    }
+};
+
+/* =====================================
+    5. ATUR EVENT SUBMIT SAAT DOM READY
+===================================== */
+document.addEventListener("DOMContentLoaded", function () {
+    const loginForm = document.getElementById("loginForm");
+    if (loginForm) {
+        loginForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+            window.prosesLogin();
+        });
+    }
+
+    const btnToggle = document.getElementById("togglePassword");
+    if (btnToggle) {
+        btnToggle.addEventListener("click", function (e) {
+            e.preventDefault();
+            window.togglePasswordVisibility();
+        });
+    }
+});
 /* =====================================
     NAVIGASI TAB / SECTION DASHBOARD
 ===================================== */
