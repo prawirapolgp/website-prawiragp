@@ -720,3 +720,75 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 });
+
+/* =====================================
+    FUNGSI LOG MASUK UTAMA
+===================================== */
+function prosesLogin() {
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+    const errorMessage = document.getElementById("errorMessage");
+
+    if (!usernameInput || !passwordInput) return;
+
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value;
+
+    if (errorMessage) errorMessage.style.display = "none";
+
+    // 1. Semak Log Masuk Admin Default
+    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+        sessionStorage.setItem("adminLoggedIn", "true");
+        sessionStorage.setItem("userRole", "administrator");
+        sessionStorage.setItem("userName", "Administrator");
+
+        window.location.replace("dashboard.html");
+        return;
+    }
+
+    // 2. Semak Log Masuk Anggota Default
+    if (username === USER_USERNAME && password === USER_PASSWORD) {
+        sessionStorage.setItem("adminLoggedIn", "true");
+        sessionStorage.setItem("userRole", "anggota");
+        sessionStorage.setItem("userName", "Anggota Prawira");
+
+        window.location.replace("dashboard.html");
+        return;
+    }
+
+    // 3. Semak Log Masuk dari Data LocalStorage (Jika Ada)
+    let dataAnggota = JSON.parse(localStorage.getItem('dataPrawira')) || [];
+    const cekAkun = dataAnggota.find(user => user.username === username && user.password === password);
+
+    if (cekAkun) {
+        sessionStorage.setItem("adminLoggedIn", "true");
+        sessionStorage.setItem("userRole", cekAkun.role || "anggota");
+        sessionStorage.setItem("userName", cekAkun.nama);
+
+        window.location.replace("dashboard.html");
+        return;
+    }
+
+    // Papar Ralat
+    if (errorMessage) {
+        errorMessage.textContent = "Username atau password salah!";
+        errorMessage.style.display = "block";
+    }
+    passwordInput.value = "";
+}
+
+// Fungsi Lihat/Sembunyi Kata Laluan
+function togglePasswordVisibility() {
+    const passwordInput = document.getElementById("password");
+    const toggleBtn = document.getElementById("togglePassword");
+
+    if (!passwordInput || !toggleBtn) return;
+
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        toggleBtn.textContent = "🙈";
+    } else {
+        passwordInput.type = "password";
+        toggleBtn.textContent = "👁️";
+    }
+}
