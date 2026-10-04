@@ -117,58 +117,97 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    /* =====================================
-       HALAMAN LOGIN (index.html)
-    ===================================== */
-    const loginForm = document.getElementById("loginForm");
+/* =====================================
+HALAMAN LOGIN (index.html)
+===================================== */
 
-    if (loginForm) {
-        if (isLoggedIn === "true") {
-            window.location.href = "dashboard.html";
+// Fungsi Login yang dipanggil langsung oleh tombol
+window.prosesLogin = function() {
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+    const errorMessage = document.getElementById("errorMessage");
+
+    if (!usernameInput || !passwordInput) return;
+
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value;
+
+    if (errorMessage) errorMessage.style.display = "none";
+
+    // 1. CEK LOGIN ADMIN DEFAULT
+    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+        sessionStorage.setItem("adminLoggedIn", "true");
+        sessionStorage.setItem("userRole", "administrator");
+        sessionStorage.setItem("userName", "Administrator");
+
+        // Upload/sinkronisasi data lokal ke Firebase jika ada
+        if (typeof syncLocalStorageToFirebase === "function") {
+            syncLocalStorageToFirebase();
         }
 
-        loginForm.addEventListener("submit", function (event) {
-            event.preventDefault();
-            const username = document.getElementById("username").value.trim();
-            const password = document.getElementById("password").value;
-            const errorMessage = document.getElementById("errorMessage");
+        window.location.href = "dashboard.html";
+        return;
+    }
 
-            if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-                sessionStorage.setItem("adminLoggedIn", "true");
-                sessionStorage.setItem("userRole", "administrator");
-                sessionStorage.setItem("userName", "Administrator");
-                window.location.href = "dashboard.html";
-            } else if (username === USER_USERNAME && password === USER_PASSWORD) {
-                sessionStorage.setItem("adminLoggedIn", "true");
-                sessionStorage.setItem("userRole", "anggota");
-                sessionStorage.setItem("userName", "Anggota Prawira");
-                window.location.href = "dashboard.html";
-            } else {
-                // Cek Login dari Firebase Node Users
-                db.ref("users").once("value", snapshot => {
-                    let userFound = false;
-                    snapshot.forEach(childSnap => {
-                        const user = childSnap.val();
-                        if (user.username === username && user.password === password) {
-                            userFound = true;
-                            sessionStorage.setItem("adminLoggedIn", "true");
-                            sessionStorage.setItem("userRole", user.role || "anggota");
-                            sessionStorage.setItem("userName", user.nama || "Anggota Prawira");
-                            window.location.href = "dashboard.html";
-                        }
-                    });
+    // 2. CEK LOGIN USER (ANGGOTA) DEFAULT
+    if (username === USER_USERNAME && password === USER_PASSWORD) {
+        sessionStorage.setItem("adminLoggedIn", "true");
+        sessionStorage.setItem("userRole", "anggota");
+        sessionStorage.setItem("userName", "Anggota Prawira");
 
-                    if (!userFound) {
-                        if (errorMessage) {
-                            errorMessage.textContent = "Username atau password salah!";
-                            errorMessage.style.display = "block";
-                        }
-                        document.getElementById("password").value = "";
-                    }
-                });
-            }
+        window.location.href = "dashboard.html";
+        return;
+    }
+
+    // 3. CEK LOGIN DARI DATA PRAWIRA LOKAL
+    let dataAnggota = JSON.parse(localStorage.getItem('dataPrawira')) || [];
+    const cekAkun = dataAnggota.find(user => user.username === username && user.password === password);
+
+    if (cekAkun) {
+        sessionStorage.setItem("adminLoggedIn", "true");
+        sessionStorage.setItem("userRole", cekAkun.role || "anggota");
+        sessionStorage.setItem("userName", cekAkun.nama);
+
+        window.location.href = "dashboard.html";
+        return;
+    }
+
+    // JIKA TIDAK COCOK
+    if (errorMessage) {
+        errorMessage.textContent = "Username atau password salah!";
+        errorMessage.style.display = "block";
+    }
+    passwordInput.value = "";
+};
+
+/* =====================================
+   TOGGLE SHOW / HIDE PASSWORD
+===================================== */
+window.togglePasswordVisibility = function () {
+    const passwordInput = document.getElementById("password");
+    const toggleBtn = document.getElementById("togglePassword");
+
+    if (!passwordInput || !toggleBtn) return;
+
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        toggleBtn.textContent = "🙈"; // Ubah ke ikon mata tertutup saat password terlihat
+    } else {
+        passwordInput.type = "password";
+        toggleBtn.textContent = "👁️"; // Ubah ke ikon mata terbuka saat password tersembunyi
+    }
+};
+
+// Mencegah form reload jika tombol Enter ditekan
+document.addEventListener("DOMContentLoaded", function () {
+    const loginForm = document.getElementById("loginForm");
+    if (loginForm) {
+        loginForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+            window.prosesLogin();
         });
     }
+});
 
     /* =====================================
        LOGOUT
