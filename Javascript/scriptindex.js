@@ -341,6 +341,69 @@ document.addEventListener("DOMContentLoaded", function () {
 
         renderTabelPrawira();
 
+        // --- SINKRONISASI DATA PRAWIRA REALTIME ---
+const prawiraRef = database.ref('dataPrawira');
+
+// 1. Dapatkan dan Dengarkan Perubahan Data secara Realtime dari Firebase
+prawiraRef.on('value', (snapshot) => {
+    const data = snapshot.val();
+    window.dataPrawira = [];
+    
+    if (data) {
+        // Mengubah objek Firebase menjadi Array agar sesuai dengan fungsi render yang ada
+        Object.keys(data).forEach(key => {
+            window.dataPrawira.push({
+                firebaseKey: key,
+                ...data[key]
+            });
+        });
+    }
+    
+    // Render otomatis setiap kali ada data baru / perubahan dari perangkat manapun
+    if (typeof window.renderTabelPrawira === 'function') {
+        window.renderTabelPrawira();
+    }
+    if (typeof updateRekapData === 'function') {
+        updateRekapData();
+    }
+});
+
+// 2. Simpan / Tambah Data ke Firebase
+formPrawira.addEventListener('submit', function (e) {
+    e.preventDefault();
+    
+    const dataBaru = {
+        callSign: document.getElementById('callSign').value,
+        pangkat: document.getElementById('pangkat').value,
+        nama: document.getElementById('nama').value,
+        jk: document.getElementById('jk').value,
+        tanggungJawab: document.getElementById('tanggungJawab').value
+    };
+
+    const index = document.getElementById('editIndex').value;
+
+    if (index === '') {
+        // Tambah data baru ke Firebase Database
+        prawiraRef.push(dataBaru);
+    } else {
+        // Update data berdasarkan Firebase Key
+        const itemKey = window.dataPrawira[index].firebaseKey;
+        if (itemKey) {
+            database.ref('dataPrawira/' + itemKey).set(dataBaru);
+        }
+    }
+
+    modalPrawira.style.display = 'none';
+});
+
+// 3. Hapus Data dari Firebase
+window.hapusPrawira = function (i) {
+    const item = window.dataPrawira[i];
+    if (item && item.firebaseKey && confirm('Hapus data Prawira ini?')) {
+        database.ref('dataPrawira/' + item.firebaseKey).remove();
+    }
+};
+
         // --- LIST MDT ---
         let dataMDT = JSON.parse(localStorage.getItem('dataMDT')) || [];
         const tbodyMDT = document.getElementById('tabelMDTBody');
